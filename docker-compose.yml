@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: gridsphere_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: securepassword123
+      POSTGRES_DB: gridsphere
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: gridsphere_api
+    restart: always
+    ports:
+      - "8001:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://admin:securepassword123@db:5432/gridsphere
+      # --- UPDATE THESE TO MATCH YOUR EXISTING MQTT BROKER ---
+      - MQTT_BROKER=mqtt.gridsphere.in 
+      - MQTT_PORT=1883
+      - MQTT_USER=esp8266
+      - MQTT_PASS=strongpassword123
+
+volumes:
+  postgres_data:
