@@ -8,10 +8,12 @@ services:
     ports:
       - "8001:8000"
     environment:
-      # --- UPDATE WITH YOUR EXACT NEON DB URL ---
-      # Example: postgresql+asyncpg://[user]:[password]@[endpoint].neon.tech/[dbname]?sslmode=require
-      - DATABASE_URL="postgresql+psycopg://neondb_owner:npg_Z2IF5LQRSxuq@ep-autumn-dew-an4wsq8n-pooler.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"     
-      # --- UPDATE THESE TO MATCH YOUR EXISTING MQTT BROKER ---
+      # 1. Changed psycopg to asyncpg
+      # 2. Changed sslmode=require to ssl=require
+      # 3. Removed channel_binding (asyncpg doesn't use it the same way)
+      - DATABASE_URL="postgresql+asyncpg://neondb_owner:YOUR_NEW_PASSWORD@ep-autumn-dew-an4wsq8n-pooler.c-6.us-east-1.aws.neon.tech/neondb?ssl=require"     
+      
+      # --- MQTT BROKER ---
       - MQTT_BROKER=mqtt.gridsphere.in 
       - MQTT_PORT=1883
       - MQTT_USER=esp8266
